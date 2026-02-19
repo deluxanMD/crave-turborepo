@@ -1,0 +1,5 @@
+CREATE DATABASE db_auth
+CREATE DATABASE db_restaurants
+CREATE DATABASE db_orders
+CREATE DATABASE db_payments
+CREATE DATABASE db_delivery
