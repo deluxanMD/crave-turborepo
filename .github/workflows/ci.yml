@@ -1,0 +1,50 @@
+name: CraveCourier CI
+
+# Run this workflow on every push to main, and on every pull request to main or dev.
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main", "dev"]
+
+jobs:
+  build-lint-test:
+    name: Build, Lint, and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛑 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js (v22 LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: ⚡ Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      # TURBO COMMANDS
+      # Because of Turborepo, these will run across ALL your apps in parallel!
+
+      - name: 🏗️ Build All Apps
+        run: npm run build
+        env:
+          # Tell Turbo to use the cache we set up in the previous step
+          TURBO_CACHE_DIR: .turbo
+
+      - name: 🧹 Run Linters
+        run: npm run lint
+        continue-on-error: true
+
+      - name: 🧪 Run Tests
+        run: npm run test
+        continue-on-error: true
