@@ -35,7 +35,7 @@ jobs:
 
       # Generate Prisma Client before building so TypeScript has the generated types
       - name: 🗄️ Generate Prisma Client
-        run: npx prisma generate
+        run: npx prisma generate --schema=./apps/auth-service/prisma/schema.prisma
 
       # TURBO COMMANDS
       # Because of Turborepo, these will run across ALL your apps in parallel!
