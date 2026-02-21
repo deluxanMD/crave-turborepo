@@ -46,13 +46,11 @@ jobs:
       - name: 🧹 Run Linters
         run: npm run lint
 
-      - name: 🧪 Run Tests
-        run: npm run test
-
       - name: 🧪 Run Tests with Coverage
         run: npm run test:coverage
         env:
           TURBO_CACHE_DIR: .turbo
+          TURBO_FORCE: true
 
       - name: 📊 Upload All Coverage Reports
         uses: actions/upload-artifact@v4

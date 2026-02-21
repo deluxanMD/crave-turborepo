@@ -20,6 +20,7 @@ export default defineConfig({
         '**/*.test.tsx',
       ],
       thresholds: {
+        perFile: true,
         lines: 80,
         functions: 80,
         branches: 80,
