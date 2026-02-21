@@ -59,3 +59,4 @@ jobs:
           path: |
             apps/*/coverage/
             packages/*/coverage/
+          if-no-files-found: error

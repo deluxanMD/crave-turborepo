@@ -15,7 +15,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "turbo run test",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage --config vitest.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.3",
