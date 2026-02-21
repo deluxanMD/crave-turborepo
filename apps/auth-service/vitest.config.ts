@@ -4,6 +4,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    include: ['src/**/*.ts'],
+    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -14,6 +16,8 @@ export default defineConfig({
         '**/*.d.ts',
         'vitest.config.ts',
         '.eslintrc.cjs',
+        '**/*.test.ts',
+        '**/*.test.tsx',
       ],
       thresholds: {
         lines: 80,
