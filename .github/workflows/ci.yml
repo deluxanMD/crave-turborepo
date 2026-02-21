@@ -20,10 +20,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "npm" # Automatically caches your node_modules for faster runs
+          cache: "npm"
 
       - name: 📦 Install Dependencies
-        run: npm ci # `npm ci` is faster and stricter than `npm install` for CI environments
+        run: npm ci
 
       - name: ⚡ Cache Turborepo
         uses: actions/cache@v4
@@ -32,10 +32,6 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
-
-      # Generate Prisma Client before building so TypeScript has the generated types
-      - name: 🗄️ Generate Prisma Client
-        run: npx prisma generate --schema=./apps/auth-service/prisma/schema.prisma
 
       # TURBO COMMANDS
       # Because of Turborepo, these will run across ALL your apps in parallel!
