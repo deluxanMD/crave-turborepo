@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { register, login } from './auth.controller.js';
+import bcrypt from 'bcrypt';
 
 // Mock dependencies
 vi.mock('bcrypt', () => ({
@@ -30,6 +31,9 @@ vi.mock('../schemas/auth.schema.js', () => ({
 }));
 
 import { prisma } from '../lib/prisma.js';
+import z from 'zod';
+import { registerSchema, loginSchema } from '../schemas/auth.schema.js';
+import { Role } from '../types/auth.types.js';
 
 const mockReq = (body: object) => ({ body }) as any;
 const mockRes = () => {
@@ -73,6 +77,37 @@ describe('AuthController', () => {
         error: 'User already exists',
       });
     });
+
+    it('should return 400 if validation fails', async () => {
+      const req = mockReq({ email: 'test@test.com' });
+      const res = mockRes();
+
+      const zodError = new z.ZodError([
+        { code: 'custom', message: 'Validation failed', path: ['email'] },
+      ]);
+      vi.spyOn(registerSchema, 'parse').mockImplementationOnce(() => {
+        throw zodError;
+      });
+
+      await register(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ errors: zodError.issues });
+    });
+
+    it('should return 500 on internal server error', async () => {
+      const req = mockReq({ email: 'test@test.com' });
+      const res = mockRes();
+
+      vi.mocked(prisma.user.findUnique).mockRejectedValue(new Error('Internal server error'));
+
+      await register(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        error: 'Internal server error',
+      });
+    });
   });
 
   describe('login', () => {
@@ -92,6 +127,74 @@ describe('AuthController', () => {
       expect(res.json).toHaveBeenCalledWith({
         token: 'mock_token',
         role: 'user',
+      });
+    });
+
+    it('should return 401 if user not available', async () => {
+      const req = mockReq({ email: 'test@test.com', password: 'wrong_password' });
+      const res = mockRes();
+
+      vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
+
+      await login(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        error: 'Invalid credentials',
+      });
+    });
+
+    it('should return 401 on invalid credentials', async () => {
+      const req = mockReq({ email: 'test@test.com', password: 'wrong_password' });
+      const res = mockRes();
+
+      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+        id: '1',
+        email: 'test@test.com',
+        password_hash: 'hashed_password',
+        role: Role.CUSTOMER,
+        created_at: new Date(),
+      });
+
+      vi.mocked(bcrypt.compare).mockResolvedValue(false as never);
+
+      await login(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        error: 'Invalid credentials',
+      });
+    });
+
+    it('should return 400 if validation fails', async () => {
+      const req = mockReq({ email: 'test' });
+      const res = mockRes();
+
+      const zodError = new z.ZodError([
+        { code: 'custom', message: 'Validation failed', path: ['email'] },
+      ]);
+
+      vi.spyOn(loginSchema, 'parse').mockImplementationOnce(() => {
+        throw zodError;
+      });
+
+      await login(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ errors: zodError.issues });
+    });
+
+    it('should return 500 on internal server error', async () => {
+      const req = mockReq({ email: 'test@test.com', password: 'password123' });
+      const res = mockRes();
+
+      vi.mocked(prisma.user.findUnique).mockRejectedValue(new Error('Internal server error'));
+
+      await login(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        error: 'Internal server error',
       });
     });
   });
