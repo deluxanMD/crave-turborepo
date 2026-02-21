@@ -13,6 +13,7 @@
       "outputs": []
     },
     "lint": {},
+    "format": {},
     "dev": {
       "cache": false,
       "persistent": true
