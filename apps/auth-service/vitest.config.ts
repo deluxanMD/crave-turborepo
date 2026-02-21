@@ -5,7 +5,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
     environment: 'node',
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.ts'],
     exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
     coverage: {
       provider: 'v8',
@@ -19,7 +19,6 @@ export default defineConfig({
         'vitest.config.ts',
         '.eslintrc.cjs',
         '**/*.test.ts',
-        '**/*.test.tsx',
       ],
       thresholds: {
         perFile: true,
