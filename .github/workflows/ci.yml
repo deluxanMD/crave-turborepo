@@ -33,6 +33,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
+      - name: 📝 Create Dummy .env for Prisma
+        run: |
+          echo 'DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"' > .env
+          echo 'DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"' > apps/auth-service/.env
+
       # TURBO COMMANDS
       # Because of Turborepo, these will run across ALL your apps in parallel!
 
@@ -40,7 +45,6 @@ jobs:
         run: npm run build
         env:
           TURBO_CACHE_DIR: .turbo
-          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
 
       - name: 🧹 Run Linters
         run: npm run lint
