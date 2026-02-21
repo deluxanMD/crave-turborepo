@@ -12,6 +12,9 @@
       "dependsOn": ["build"],
       "outputs": []
     },
+    "test:coverage": {
+      "outputs": ["coverage/**"]
+    },
     "lint": {},
     "format": {},
     "dev": {

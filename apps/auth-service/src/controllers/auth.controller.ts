@@ -2,8 +2,8 @@ import bcrypt from 'bcrypt';
 import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
-import { prisma } from '@/lib/prisma.js';
-import { loginSchema, registerSchema } from '@/schemas/auth.schema.js';
+import { prisma } from '../lib/prisma.js';
+import { loginSchema, registerSchema } from '../schemas/auth.schema.js';
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {

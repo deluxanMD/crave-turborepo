@@ -5,7 +5,7 @@ on:
   push:
     branches: ['main']
   pull_request:
-    branches: ['main']
+    branches: ['main', 'dev']
 
 jobs:
   build-lint-test:
@@ -38,9 +38,6 @@ jobs:
           echo 'DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"' > .env
           echo 'DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"' > apps/auth-service/.env
 
-      # TURBO COMMANDS
-      # Because of Turborepo, these will run across ALL your apps in parallel!
-
       - name: 🏗️ Build All Apps
         run: npm run build
         env:
@@ -49,6 +46,17 @@ jobs:
       - name: 🧹 Run Linters
         run: npm run lint
 
-      - name: 🧪 Run Tests
-        run: npm run test
-        continue-on-error: true # Set to true until we set up Jest/Vitest in a later phase
+      - name: 🧪 Run Tests with Coverage
+        run: npm run test:coverage
+        env:
+          TURBO_CACHE_DIR: .turbo
+          TURBO_FORCE: true
+
+      - name: 📊 Upload All Coverage Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-services-coverage
+          path: |
+            apps/*/coverage/
+            packages/*/coverage/
+          if-no-files-found: error
