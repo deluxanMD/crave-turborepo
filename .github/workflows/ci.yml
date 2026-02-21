@@ -48,7 +48,6 @@ jobs:
 
       - name: 🧹 Run Linters
         run: npm run lint
-        continue-on-error: true # Currently set to true so your pipeline doesn't fail if you haven't set up ESLint yet
 
       - name: 🧪 Run Tests
         run: npm run test

@@ -1,0 +1,15 @@
+{
+  "files": [],
+  "references": [
+    { "path": "apps/auth-service/tsconfig.json" }
+    // { "path": "apps/courier-app/tsconfig.json" },
+    // { "path": "apps/customer-app/tsconfig.json" },
+    // { "path": "apps/delivery-service/tsconfig.json" },
+    // { "path": "apps/notification-service/tsconfig.json" },
+    // { "path": "apps/order-service/tsconfig.json" },
+    // { "path": "apps/payment-service/tsconfig.json" },
+    // { "path": "apps/restaurant-app/tsconfig.json" },
+    // { "path": "apps/restaurant-service/tsconfig.json" },
+    // { "path": "packages/eslint-config/tsconfig.json" }
+  ]
+}
