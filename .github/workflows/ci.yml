@@ -39,8 +39,8 @@ jobs:
       - name: 🏗️ Build All Apps
         run: npm run build
         env:
-          # Tell Turbo to use the cache we set up in the previous step
           TURBO_CACHE_DIR: .turbo
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
 
       - name: 🧹 Run Linters
         run: npm run lint
