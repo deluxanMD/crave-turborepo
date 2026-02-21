@@ -1,7 +1,7 @@
-// apps/api-service-1/eslint.config.mjs
 import base from '../../eslint.config.mjs';
 
 export default [
+  { ignores: ['prisma.config.ts'] },
   ...base,
   {
     rules: {
