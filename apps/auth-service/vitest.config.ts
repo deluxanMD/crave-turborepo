@@ -20,6 +20,9 @@ export default defineConfig({
         'vitest.config.ts',
         '.eslintrc.cjs',
         '**/*.test.ts',
+        'src/index.ts',
+        'src/lib/prisma.ts',
+        'src/types/**',
       ],
       thresholds: {
         perFile: true,
