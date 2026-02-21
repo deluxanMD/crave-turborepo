@@ -5,6 +5,7 @@
     "target": "ESNext",
     "outDir": "dist",
     "rootDir": "src",
+    "types": ["vitest/globals", "node"],
     "paths": {
       "@/*": ["./src/*"],
       "@/generated/*": ["./generated/*"]

@@ -14,7 +14,8 @@
     "format:check": "prettier --check .",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:watch:coverage": "vitest run --coverage --watch"
   },
   "keywords": [],
   "author": "",
